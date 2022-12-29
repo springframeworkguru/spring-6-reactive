@@ -9,8 +9,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * Created by jt, Spring Framework Guru.
  */
@@ -24,19 +22,13 @@ public class BeerController {
     private final BeerService beerService;
 
     @PostMapping(BEER_PATH)
-    ResponseEntity<Void> createNewBeer(@RequestBody BeerDTO beerDTO){
-
-        AtomicInteger atomicInteger = new AtomicInteger();
-
-        beerService.saveNewBeer(beerDTO).subscribe(savedDto -> {
-            atomicInteger.set(savedDto.getId());
-        });
-
-        return ResponseEntity.created(UriComponentsBuilder
-                     .fromHttpUrl("http://localhost:8080/" + BEER_PATH + "/" + atomicInteger.get())
-                     .build().toUri())
-                .build();
-
+    Mono<ResponseEntity<Void>> createNewBeer(@RequestBody BeerDTO beerDTO){
+       return beerService.saveNewBeer(beerDTO)
+               .map(savedDto -> ResponseEntity.created(UriComponentsBuilder
+                       .fromHttpUrl("http://localhost:8080/" + BEER_PATH
+                               + "/" + savedDto.getId())
+                       .build().toUri())
+                       .build());
     }
 
     @GetMapping(BEER_PATH_ID)
