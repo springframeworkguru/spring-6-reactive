@@ -1,5 +1,6 @@
 package guru.springframework.spring6reactive.controllers;
 
+import guru.springframework.spring6reactive.domain.Beer;
 import guru.springframework.spring6reactive.model.BeerDTO;
 import guru.springframework.spring6reactive.repositories.BeerRepositoryTest;
 import org.junit.jupiter.api.MethodOrderer;
@@ -41,8 +42,19 @@ class BeerControllerTest {
     }
 
     @Test
-    void testCreateBeer() {
+    void testCreateBeerBadData() {
+        Beer testBeer = BeerRepositoryTest.getTestBeer();
+        testBeer.setBeerName("");
 
+        webTestClient.post().uri(BeerController.BEER_PATH)
+                .body(Mono.just(testBeer), BeerDTO.class)
+                .header("Content-Type", "application/json")
+                .exchange()
+                .expectStatus().isBadRequest();
+    }
+
+    @Test
+    void testCreateBeer() {
         webTestClient.post().uri(BeerController.BEER_PATH)
                 .body(Mono.just(BeerRepositoryTest.getTestBeer()), BeerDTO.class)
                 .header("Content-Type", "application/json")
