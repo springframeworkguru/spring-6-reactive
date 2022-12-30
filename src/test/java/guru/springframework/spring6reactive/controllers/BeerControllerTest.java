@@ -77,6 +77,13 @@ class BeerControllerTest {
     }
 
     @Test
+    void testGetByIdNotFound() {
+        webTestClient.get().uri(BeerController.BEER_PATH_ID, 999)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     @Order(1)
     void testGetById() {
         webTestClient.get().uri(BeerController.BEER_PATH_ID, 1)
