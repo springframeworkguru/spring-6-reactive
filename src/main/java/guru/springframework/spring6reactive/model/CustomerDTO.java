@@ -1,5 +1,6 @@
 package guru.springframework.spring6reactive.model;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,8 @@ import java.time.LocalDateTime;
 public class CustomerDTO {
 
     private Integer id;
+
+    @NotBlank
     private String customerName;
     private LocalDateTime createdDate;
     private LocalDateTime lastModifiedDate;
