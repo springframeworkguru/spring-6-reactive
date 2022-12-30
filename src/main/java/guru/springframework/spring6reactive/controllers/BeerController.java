@@ -35,6 +35,7 @@ public class BeerController {
     Mono<ResponseEntity<Void>> patchExistingBeer(@PathVariable Integer beerId,
                                               @Validated @RequestBody BeerDTO beerDTO){
         return beerService.patchBeer(beerId, beerDTO)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)))
                 .map(updatedDto -> ResponseEntity.ok().build());
     }
 
