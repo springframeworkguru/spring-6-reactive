@@ -17,7 +17,8 @@ public class SecurityConfig {
     @Bean
     SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http){
         http.authorizeExchange(authorizeExchangeSpec -> authorizeExchangeSpec.anyExchange().authenticated())
-                .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec.jwt(Customizer.withDefaults()));
+                .oauth2ResourceServer(oAuth2ResourceServerSpec -> oAuth2ResourceServerSpec.jwt(Customizer.withDefaults()))
+                .csrf(ServerHttpSecurity.CsrfSpec::disable);
 
         return http.build();
     }
